@@ -11,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 
 
 builder.Services.AddCors(options =>
@@ -24,31 +26,26 @@ builder.Services.AddCors(options =>
 });
 
 
-
 // Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddCors();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(jwtOptions =>
-            {
-                jwtOptions.Authority = "https://localhost:7259";
-                jwtOptions.Audience = "https://localhost:7259";
-            });
+//builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
 
+app.UseAuthorization();
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
 
 app.UseCors(options =>
@@ -70,17 +67,12 @@ app.UseCors(
 app.UseCors(MyAllowSpecificOrigins);
 
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 
 app.MapGet("/", () => "Hello, World!");
 app.MapGet("/secret", (ClaimsPrincipal user) => $"Hello {user.Identity?.Name}. My secret")
     .RequireAuthorization();
 
-app.MapGet("/secret2", () => "This is a different secret!")
-    .RequireAuthorization(p => p.RequireClaim("scope", "myapi:secrets"));
+app.UseHttpsRedirection();
 
 app.MapControllers();
 

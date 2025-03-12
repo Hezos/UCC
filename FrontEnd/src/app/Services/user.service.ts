@@ -23,6 +23,6 @@ export class UserService {
   }
 
   getUser() {
-    return this.http.get<User>('https://localhost:7159/api/user');
+    return this.http.get<User>('https://localhost:7274/api/user');
   }
 }
