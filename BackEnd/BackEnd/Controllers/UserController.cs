@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using BackEnd.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -11,9 +12,17 @@ namespace BackEnd.Controllers
     [ApiController]
     public class UserController : Controller
     {
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         public IActionResult Index()
         {
-            return Ok("Users will be displayed here");
+            var user = _userService.test();
+            return Ok(user);
         }
     }
 }
