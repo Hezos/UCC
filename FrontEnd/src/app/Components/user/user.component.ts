@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { UserService } from '../../Services/user.service';
+import { User } from '../../Types';
 
 @Component({
   selector: 'app-user',
@@ -9,12 +10,23 @@ import { UserService } from '../../Services/user.service';
 
 export class UserComponent implements OnInit {
 
-  displayText: string = "";
+  displayUser: User = {
+    id: "",
+    Name: "",
+    Password: ""
+  }
 
   userService = inject(UserService);
 
   ngOnInit(): void {
-    this.displayText = this.userService.getMessage()
+    
+     this.userService.getUser().subscribe({
+       next: user => {
+         console.log(user);
+         this.displayUser = user;
+      }
+    });
+    
     }
 
 }
