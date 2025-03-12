@@ -1,4 +1,5 @@
-﻿using BackEnd.Services;
+﻿using BackEnd.Models;
+using BackEnd.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,10 +20,27 @@ namespace BackEnd.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var user = _userService.test();
             return Ok(user);
         }
+
+        [HttpPost("current")]
+        public async Task<IActionResult> Get([FromBody]string id)
+        {
+            var result = await _userService.GetAsync(id);
+            return Ok(result);
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody]User user)
+        {
+            var registered = await _userService.CreateAsync(user);
+            return Ok(registered);
+        }
+
+
     }
 }

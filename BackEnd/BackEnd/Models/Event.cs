@@ -11,10 +11,15 @@ namespace BackEnd.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
-        [JsonPropertyName("UserIds")]
-        public List<string> UserIds { get; set; } = new List<string>();
+        [JsonPropertyName("Title")]
+        public string Title { get; set; } = "";
 
+        
         [JsonPropertyName("Date")]
-        public string Date { get; set; } = "";
+        public string Occurrence { get; set; } = "";
+
+        [JsonPropertyName("Description")]
+        public string Description { get; set; } = "";
+
     }
 }
