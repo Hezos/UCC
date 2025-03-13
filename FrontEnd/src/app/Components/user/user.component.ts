@@ -11,9 +11,10 @@ import { User } from '../../Types';
 export class UserComponent implements OnInit {
 
   displayUser: User = {
-    id: "",
-    Name: "",
-    Password: ""
+      id: "",
+      Name: "",
+      Password: "",
+      jwt: ''
   }
 
   userService = inject(UserService);

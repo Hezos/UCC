@@ -8,28 +8,44 @@ import { Event } from '../Types';
 
 
 
-//Allways ask UserId before executing
+//Allways ask UserId before executing, jwt comes from the user object
 export class EventService {
 
   constructor() { }
 
   http = inject(HttpClient);
 
-  getByUser(id: string) {
-    return this.http.get<Array<Event>>(`https://localhost:7274/api/event/${id}`);
+  getByUser(id: string, jwt: string) {
+    return this.http.get<Array<Event>>(`https://localhost:7274/api/event/${id}`, {
+      headers: {
+        "Authorization": jwt
+      }
+    });
   }
 
-  updateEvent(id: string, event: Event) {
-    return this.http.put<Event>(`https://localhost:7274/api/event/${id}`, event);
+  updateEvent(id: string, event: Event, jwt: string) {
+    return this.http.put<Event>(`https://localhost:7274/api/event/${id}`, event, {
+      headers: {
+        "Authorization": jwt
+      }
+    });
   }
 
-  registerEvent(userid: string, event: Event) {
+  registerEvent(userid: string, event: Event, jwt: string) {
     event.UserId = userid;
-    return this.http.post<Event>("https://localhost:7274/api/event", event);
+    return this.http.post<Event>("https://localhost:7274/api/event", event, {
+      headers: {
+        "Authorization": jwt
+      }
+    });
   }
 
-  deleteEvent(id: string) {
-    return this.http.delete(`https://localhost:7274/api/event/${id}`);
+  deleteEvent(id: string, jwt: string) {
+    return this.http.delete(`https://localhost:7274/api/event/${id}`, {
+      headers: {
+        "Authorization": jwt
+      }
+    });
   }
 
 }
