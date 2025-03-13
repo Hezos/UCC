@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Event } from '../Types';
 
@@ -18,7 +18,7 @@ export class EventService {
   getByUser(id: string, jwt: string) {
     return this.http.get<Array<Event>>(`https://localhost:7274/api/event/${id}`, {
       headers: {
-        "Authorization": jwt
+        "Authorization": `Bearer ${jwt}` 
       }
     });
   }
@@ -26,7 +26,7 @@ export class EventService {
   updateEvent(id: string, event: Event, jwt: string) {
     return this.http.put<Event>(`https://localhost:7274/api/event/${id}`, event, {
       headers: {
-        "Authorization": jwt
+        "Authorization": `Bearer ${jwt}`
       }
     });
   }
@@ -35,7 +35,7 @@ export class EventService {
     event.UserId = userid;
     return this.http.post<Event>("https://localhost:7274/api/event", event, {
       headers: {
-        "Authorization": jwt
+        "Authorization": `Bearer ${jwt}` 
       }
     });
   }
@@ -43,7 +43,7 @@ export class EventService {
   deleteEvent(id: string, jwt: string) {
     return this.http.delete(`https://localhost:7274/api/event/${id}`, {
       headers: {
-        "Authorization": jwt
+        "Authorization": `Bearer ${jwt}` 
       }
     });
   }

@@ -13,6 +13,6 @@ export interface User
   Name: string;
   Password: string;
   //For events pass userid for the controller and get all events that way.
-  jwt: string;
+  JWT: string;
 
 }

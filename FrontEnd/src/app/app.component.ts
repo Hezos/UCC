@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
       id: "",
       Name: "",
       Password: "",
-      jwt: ""
+      JWT: ""
     };
     this.userService.getUsers().subscribe({
       next: Users => {
@@ -52,25 +52,12 @@ export class AppComponent implements OnInit {
     id: "",
     Name: "",
     Password: "",
-    jwt:""
+    JWT: ""
   }
 
   users: Array<User> = [];
 
-  eventList: Array<Event> = [
-    {
-        id: '2',
-        Occurrence: '2025/03/14',
-      Title: 'Test1',
-      UserId:""
-    },
-    {
-        id: '3',
-        Occurrence: '2025/02/14',
-      Title: 'Test2',
-      UserId:""
-    }
-  ];
+  eventList: Array<Event> = [];
 
 
   resetPassword() {
@@ -94,7 +81,7 @@ export class AppComponent implements OnInit {
       id: "",
         Name: "",
       Password: "",
-      jwt:""
+      JWT:""
     }
     this.showEvents = false;
   }
@@ -149,7 +136,15 @@ export class AppComponent implements OnInit {
       }
     }
     this.revealEvents();
-    console.log(this.displayUser);
+    console.log(this.displayUser.JWT);
+    
+    this.eventService.getByUser(this.displayUser.id, this.displayUser.JWT).subscribe({
+      next: Events => {
+        this.eventList = Events;
+        console.log(this.eventList);
+      }
+    });
+    
   }
     
 }

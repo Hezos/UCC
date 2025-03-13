@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
+//https://learn.microsoft.com/en-us/aspnet/core/security/authentication/jwt-authn?view=aspnetcore-9.0&tabs=windows
+
 namespace JWT.Controllers
 {
 
-    [Authorize]
     [EnableCors("_myAllowSpecificOrigins")]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class EventController : Controller

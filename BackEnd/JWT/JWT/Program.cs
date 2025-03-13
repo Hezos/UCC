@@ -24,7 +24,7 @@ namespace JWT
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   policy =>
                                   {
-                                      policy.WithOrigins("http://localhost:4200", "http://localhost:7159").AllowAnyHeader().AllowAnyMethod();
+                                      policy.WithOrigins("http://localhost:4200", "https://localhost:7274").AllowAnyHeader().AllowAnyMethod();
                                   });
             });
 
@@ -36,7 +36,6 @@ namespace JWT
 
             var app = builder.Build();
 
-            app.UseAuthorization();
 
             app.UseCors(options =>
             {
@@ -55,6 +54,8 @@ namespace JWT
 
 
             app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseAuthorization();
 
 
             //The longer one is the rigth token User secrets are wrong according to curl

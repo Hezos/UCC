@@ -14,7 +14,7 @@ export class UserComponent implements OnInit {
       id: "",
       Name: "",
       Password: "",
-      jwt: ''
+      JWT : ''
   }
 
   userService = inject(UserService);
