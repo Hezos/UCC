@@ -1,4 +1,5 @@
 using BackEnd.Services;
+using JWT.Services;
 using System.Security.Claims;
 
 namespace JWT
@@ -29,6 +30,7 @@ namespace JWT
 
             builder.Services.AddControllers();
             builder.Services.AddSingleton<IUserService, UserService>();
+            builder.Services.AddSingleton<IEventService, EventService>();
 
             builder.Services.AddCors();
 

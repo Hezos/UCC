@@ -1,16 +1,11 @@
 ﻿using BackEnd.Models;
 using MongoDB.Driver;
-using System.Text.Json;
-using System.Collections.Generic;
-using System.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BackEnd.Services
 {
     public class UserService : IUserService
     {
         private readonly IMongoCollection<User> _users;
-        private JsonSerializerOptions _defaultJsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
 
         public UserService()
         {
@@ -39,11 +34,6 @@ namespace BackEnd.Services
         public async Task<User> GetAsync(string id)
         {
             return await _users.Find<User>(_ => _.Id == id).FirstOrDefaultAsync();
-        }
-
-        public Task<List<Event>> GetEvents()
-        {
-            throw new NotImplementedException();
         }
 
         public User test()

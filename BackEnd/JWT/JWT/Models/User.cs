@@ -22,9 +22,9 @@ namespace BackEnd.Models
         [JsonPropertyName("Password")]
         public string Password { get; set; } = string.Empty;
 
-        [JsonPropertyName("Events")]
-        public List<Event>? Events { get; set; } = new List<Event>();
-
+        //JWT token for the user
+        [JsonPropertyName("JWT")]
+        public string JWT { get; set; } = string.Empty;
 
     }
 }

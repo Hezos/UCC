@@ -27,10 +27,19 @@ namespace BackEnd.Controllers
             return Ok(user);
         }
 
+        //Current should be registered in the FrontEnd
         [HttpPost("current")]
         public async Task<IActionResult> Get([FromBody]string id)
         {
             var result = await _userService.GetAsync(id);
+            return Ok(result);
+        }
+
+        //Give all the users as coded information
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAll()
+        {
+            List<User> result = await _userService.GetAllAsync();
             return Ok(result);
         }
 
@@ -41,6 +50,20 @@ namespace BackEnd.Controllers
             return Ok(registered);
         }
 
+        // PUT: api/User/id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(string id, [FromBody] User user)
+        {
+            User oldUser = await _userService.GetAsync(id);
+            user.Id = oldUser.Id;
+
+            if (oldUser is null)
+            {
+                return NotFound();
+            }
+            await _userService.UpdateAsync(id, user);
+            return Ok(user);
+        }
 
     }
 }

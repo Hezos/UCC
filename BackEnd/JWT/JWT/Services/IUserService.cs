@@ -14,8 +14,6 @@ namespace BackEnd.Services
 
         Task<User> GetAsync(string id);
 
-        Task<List<Event>> GetEvents();
-
         User test();
     }
 }

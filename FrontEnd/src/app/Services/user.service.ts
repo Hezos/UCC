@@ -7,22 +7,24 @@ import { User } from '../Types';
   providedIn: 'root'
 })
 
-
 export class UserService {
-  user: User = {
-    id: "1",
-    Name: "Test",
-    Password: "Password"
-  }
   constructor() { }
 
   http = inject(HttpClient);
-
-  getMessage(): string {
-    return this.user.Name;
-  }
-
+  
   getUser() {
     return this.http.get<User>('https://localhost:7274/api/user');
   }
+
+  resetPassword(userid: string, user: User) {
+    return this.http.put<User>(`https://localhost:7274/api/user/${userid}`, user);
+  }
+
+  getUsers() {
+    return this.http.get<Array<User>>('https://localhost:7274/api/user/all');
+  }
+
+
+
+
 }

@@ -1,6 +1,90 @@
-<div>
-  <h1>
-    Welcome to the application
-  </h1>
-</div>
+<!--
 <router-outlet />
+-->
+<div style="width:100%">
+  <div *ngIf="displayUser.id == '' ">
+    <h1>Login for your events</h1>
+    <div>
+      <div>
+        <h2>
+          Username:
+        </h2>
+        <input type="text" />
+      </div>
+      <div>
+        <h2>
+          Password:
+        </h2>
+        <input type="password" />
+      </div>
+      <div>
+        <button (click)="login()">
+          Login
+        </button>
+      </div>
+    </div>
+    <button (click)="showPassReset()">
+      Reset password
+    </button>
+    <div *ngIf="resetPass">
+      <div *ngIf="displayUser.id == ''">
+        <p>
+          Username:
+        </p>
+        <input type="text" />
+      </div>
+      <p> New passord: </p>
+      <input type="password" />
+      <p> New password again: </p>
+      <input type="password" />
+      <p></p>
+      <button (click)="resetPassword()">
+        Confirm reset
+      </button>
+    </div>
+    </div>
+    <div *ngIf="showEvents">
+      <h2> {{displayUser.Name}}'s events: </h2>
+      <button (click)="logout()">
+        Logout
+      </button>
+      <!-- Event div change to ngFor in the future -->
+      <div *ngFor="let event of eventList">
+        <h3>
+          Title:
+        </h3>
+        <p>
+          {{event.Title}}
+        </p>
+        <h3>
+          Date:
+        </h3>
+        <p>
+          {{event.Occurrence}}
+        </p>
+        <h3>
+          Description:
+        </h3>
+        <input type="text" placeholder="Description goes here" />
+        <button>
+          Update event's description
+        </button>
+      </div>
+
+      <div>
+        <p>You can add an event here:</p>
+        <input type="text" placeholder="event's name" />
+        <input type="date" />
+        <input type="text" placeholder="event's description" />
+        <button>
+          Add event
+        </button>
+        <p></p>
+        <input type="text" placeholder="Name of the event" />
+        <button>
+          Delete event
+        </button>
+      </div>
+    </div>
+
+  </div>
