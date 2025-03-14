@@ -3,8 +3,7 @@ import { Event, User } from './Types';
 import { UserService } from './Services/user.service';
 import { EventService } from './Services/event.service';
 import { CheckboxRequiredValidator } from '@angular/forms';
-
-
+import emailjs, { send } from '@emailjs/browser';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +17,7 @@ export class AppComponent implements OnInit {
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
   ];
 
+  verificationNumber: number = 0;
 
   userService = inject(UserService);
   eventService = inject(EventService);
@@ -43,10 +43,7 @@ export class AppComponent implements OnInit {
     
   }
 
-  oText: string = "honor";
-  cText: string = "mtstw";
-  nShift: number = 5;
-
+  
   resetPass: boolean = false;
   showEvents: boolean = false;
 
@@ -62,6 +59,12 @@ export class AppComponent implements OnInit {
   description: string = "";
   eventname: string = "";
   eventoccurrence: string = "";
+
+  //2FA valid
+  factorValid: boolean = false;
+
+  //2FA
+  authText: string = "";
 
   displayUser: User = {
     id: "",
@@ -131,37 +134,43 @@ export class AppComponent implements OnInit {
     this.description = value.value;
   }
 
-
+  handleAuthText(value: any): void {
+    this.authText = value.value;
+  }
 
   login(): void
   {
-    /*
-    this.userService.getUser().subscribe({
-      next: user => {
-        console.log(user);
-        this.displayUser = user;
-      }
-    });
-    */
     for (var index in this.users) {
       if (this.DataDecryption(this.users[index].Datacoder, this.users[index].Password) == this.password &&
         this.users[index].Name == this.username) {
         //Login for now
         this.displayUser = this.users[index];
+        this.displayUser.JWT = "";
         console.log(this.DataDecryption(this.users[index].Datacoder, this.users[index].Password));
       }
     }
-    this.revealEvents();
-    console.log(this.displayUser.JWT);
-    
-    this.eventService.getByUser(this.displayUser.id, this.displayUser.JWT).subscribe({
-      next: Events => {
-        this.eventList = Events;
-        console.log(this.eventList);
-      }
-    });
-    //End of login function
+    this.verificationNumber = Math.floor(Math.random() * 10);
+    this.sendEmail(this.verificationNumber.toString());
   }
+
+  //Submit button for 2FA:
+  confirmLogin(): void {
+    if (Number(this.authText) == this.verificationNumber) {
+      this.revealEvents();
+      this.displayUser.JWT = this.users.find(_ => _.id == this.displayUser.id)?.JWT || "1";
+      console.log(this.displayUser.JWT);
+
+      this.eventService.getByUser(this.displayUser.id, this.displayUser.JWT).subscribe({
+        next: Events => {
+          this.eventList = Events;
+          console.log(this.eventList);
+        }
+      });
+    }
+    //End of login functionality
+
+  }
+
 
   DataEncryption(original: String, shift: number): string
   {
@@ -185,14 +194,10 @@ export class AppComponent implements OnInit {
         if (oPositions[index] + shift - 1 < this.Alphabet.length)
         {
           result += this.Alphabet[oPositions[index] + shift];
-          //console.log(result);
-          //console.log(this.Alphabet[oPositions[index] + shift]);
         }
         else
         {
           result += this.Alphabet[oPositions[index] + shift - this.Alphabet.length];
-          //console.log(this.Alphabet[oPositions[index] + shift - this.Alphabet.length]);
-          //console.log(result);
         }
       
     }
@@ -217,17 +222,26 @@ export class AppComponent implements OnInit {
       //Maybe >= 0
       if (oPositions[index] - shift - 1 > 0) {
         result += this.Alphabet[oPositions[index] - shift];
-        //console.log(this.Alphabet[oPositions[index] - shift]);
-        //console.log(result);
       }
       else {
         result += this.Alphabet[oPositions[index] - shift + this.Alphabet.length];
-        //console.log(this.Alphabet[oPositions[index] - shift + this.Alphabet.length]);
-        //console.log(result);
       }
 
     }
     return result.toString();
+  }
+
+  //https://www.npmjs.com/package/@emailjs/browser
+  //https://www.emailjs.com/docs/sdk/installation/
+  async sendEmail(code: string): Promise<any> {
+    emailjs.init("Jx0WTFsHz1RYtXBxb");
+    let response = await emailjs.send("service_hmsq2km", "template_6bborgf", {
+      name: "User",
+      title: code,
+      email: "nbence0620@gmail.com",
+    });
+
+    console.log(response);
   }
 
 }
