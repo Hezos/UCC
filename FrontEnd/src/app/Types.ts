@@ -5,6 +5,7 @@ export interface Event
   Occurrence: string;
   Description?: string;
   UserId: string;
+  Datacoder: number
 }
 
 export interface User
@@ -14,5 +15,12 @@ export interface User
   Password: string;
   //For events pass userid for the controller and get all events that way.
   JWT: string;
+  Datacoder: number
 
+}
+
+export interface CryptingInfo
+{
+  Datacoder: number;
+  Data: string;
 }

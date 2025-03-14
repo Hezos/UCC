@@ -2,6 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Event, User } from './Types';
 import { UserService } from './Services/user.service';
 import { EventService } from './Services/event.service';
+import { CheckboxRequiredValidator } from '@angular/forms';
+
+
 
 @Component({
   selector: 'app-root',
@@ -11,6 +14,11 @@ import { EventService } from './Services/event.service';
 export class AppComponent implements OnInit {
   title = 'UCC apply webapage';
 
+  Alphabet: Array<string> = [
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+  ];
+
+
   userService = inject(UserService);
   eventService = inject(EventService);
 
@@ -19,7 +27,8 @@ export class AppComponent implements OnInit {
       id: "",
       Name: "",
       Password: "",
-      JWT: ""
+      JWT: "",
+      Datacoder:1
     };
     this.userService.getUsers().subscribe({
       next: Users => {
@@ -29,8 +38,14 @@ export class AppComponent implements OnInit {
       }
     });
     //Start decrypting here in the future
-
+    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+    //console.log(this.DataEncryption("password", Math.floor(Math.random() * this.Alphabet.length)));
+    
   }
+
+  oText: string = "honor";
+  cText: string = "mtstw";
+  nShift: number = 5;
 
   resetPass: boolean = false;
   showEvents: boolean = false;
@@ -52,7 +67,8 @@ export class AppComponent implements OnInit {
     id: "",
     Name: "",
     Password: "",
-    JWT: ""
+    JWT: "",
+    Datacoder:1
   }
 
   users: Array<User> = [];
@@ -81,7 +97,8 @@ export class AppComponent implements OnInit {
       id: "",
         Name: "",
       Password: "",
-      JWT:""
+      JWT: "",
+      Datacoder:1     
     }
     this.showEvents = false;
   }
@@ -127,12 +144,11 @@ export class AppComponent implements OnInit {
     });
     */
     for (var index in this.users) {
-      if (this.users[index].Password == this.password && this.users[index].Name == this.username) {
+      if (this.DataDecryption(this.users[index].Datacoder, this.users[index].Password) == this.password &&
+        this.users[index].Name == this.username) {
         //Login for now
         this.displayUser = this.users[index];
-      }
-      else {
-        console.log("Didn't find any user.");
+        console.log(this.DataDecryption(this.users[index].Datacoder, this.users[index].Password));
       }
     }
     this.revealEvents();
@@ -144,7 +160,74 @@ export class AppComponent implements OnInit {
         console.log(this.eventList);
       }
     });
-    
+    //End of login function
   }
-    
+
+  DataEncryption(original: String, shift: number): string
+  {
+    var result: String = '';
+    //Need 2 points where is in the alphabet, and where the solution will be.
+    var oPositions: Array<number> = [];
+    for (let index in original)
+    {
+      for (let char in this.Alphabet)
+      {
+        if (original[index] == this.Alphabet[char])
+        {
+          oPositions.push(Number(char));
+        }
+      }      
+    }
+
+    //If the index points way beyond the length of the array start over the counting
+    for (let index in oPositions)
+    {
+        if (oPositions[index] + shift - 1 < this.Alphabet.length)
+        {
+          result += this.Alphabet[oPositions[index] + shift];
+          //console.log(result);
+          //console.log(this.Alphabet[oPositions[index] + shift]);
+        }
+        else
+        {
+          result += this.Alphabet[oPositions[index] + shift - this.Alphabet.length];
+          //console.log(this.Alphabet[oPositions[index] + shift - this.Alphabet.length]);
+          //console.log(result);
+        }
+      
+    }
+
+    return result.toString();
+  }
+
+  DataDecryption(shift: number, Encoded:String): string
+  {
+    var result: String = '';
+    var oPositions: Array<number> = [];
+    for (let index in Encoded) {
+      for (let char in this.Alphabet) {
+        if (Encoded[index] == this.Alphabet[char]) {
+          oPositions.push(Number(char));
+        }
+      }
+    }
+
+    //If the index points way beyond the length of the array start over the counting
+    for (let index in oPositions) {
+      //Maybe >= 0
+      if (oPositions[index] - shift - 1 > 0) {
+        result += this.Alphabet[oPositions[index] - shift];
+        //console.log(this.Alphabet[oPositions[index] - shift]);
+        //console.log(result);
+      }
+      else {
+        result += this.Alphabet[oPositions[index] - shift + this.Alphabet.length];
+        //console.log(this.Alphabet[oPositions[index] - shift + this.Alphabet.length]);
+        //console.log(result);
+      }
+
+    }
+    return result.toString();
+  }
+
 }
