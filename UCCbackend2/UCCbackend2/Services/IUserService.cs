@@ -8,7 +8,7 @@ namespace UCCbackend2.Services
 
         Task<User> CreateAsync(User user);
 
-        Task UpdateAsync(string id, User user);
+        Task<User> UpdateAsync(string id, User user);
 
         Task DeleteAsync(string userid);
 

@@ -51,13 +51,13 @@
       <h3>
         Username:
       </h3>
-      <input type="text" class="form-control w-50 border-dark border-2" />
+      <input type="text" class="form-control w-50 border-dark border-2" (input)="handleUserResetText($event.target)" />
     </div>
 
     <h3> New passord: </h3>
-    <input type="password" class="form-control w-50 border-dark border-2" />
+    <input type="password" class="form-control w-50 border-dark border-2" (input)="handleResetText($event.target)"/>
     <h3> Again: </h3>
-    <input type="password" class="form-control w-50 border-dark border-2"/>
+    <input type="password" class="form-control w-50 border-dark border-2" (input)="handleValidationText($event.target)"/>
     <p></p>
     <button class="btn btn-primary" (click)="resetPassword()">
       Confirm reset
@@ -100,6 +100,7 @@
       <h2 class="border-4 border-bottom">
         Title:
       </h2>
+      <!-- Place decypher here! -->
       <h3>
         {{event.Title}}
       </h3>
@@ -133,7 +134,7 @@
       <p></p>
       <input type="date" class="form-control w-50 border-dark border-2" (input)="handleDateText($event.target)" />
       <p></p>
-      <input type="text" class="form-control w-50 border-dark border-2" (input)="handleEventDescription($event.target)"
+      <input type="text" class="form-control w-50 border-dark border-2" (input)="handleAddEventDescription($event.target)"
              placeholder="event' s description" />
       <p></p>
       <button class="btn btn-primary" (click)="createEvent()">

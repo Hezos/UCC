@@ -53,7 +53,7 @@ namespace UCCbackend2
 
 
             app.UseCors(MyAllowSpecificOrigins);
-
+            //https://learn.microsoft.com/en-us/aspnet/core/security/authentication/jwt-authn?view=aspnetcore-9.0&tabs=windows
             app.UseAuthorization();
 
 

@@ -1,5 +1,7 @@
 ﻿using UCCbackend2.Models;
 using MongoDB.Driver;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace UCCbackend2.Services
 {
@@ -45,7 +47,7 @@ namespace UCCbackend2.Services
             return user;
         }
 
-        public async Task UpdateAsync(string id, User user)
+        public async Task<User> UpdateAsync(string id, User user)
         {
             var filter = Builders<User>.Filter.Eq(_ => _.Id, id);
             var result = await _users.ReplaceOneAsync(filter, user);
@@ -54,6 +56,7 @@ namespace UCCbackend2.Services
             {
                 throw new InvalidOperationException("User not found.");
             }
+            return user;           
 
         }
     }

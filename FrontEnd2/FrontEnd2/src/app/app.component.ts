@@ -89,6 +89,10 @@ export class AppComponent implements OnInit {
 
   eventDescription: string = "";
 
+  resetName: string = "";
+
+  addEventDescription: string = "";
+
   displayUser: User = {
     id: "",
     Name: "",
@@ -103,10 +107,24 @@ export class AppComponent implements OnInit {
 
 
   resetPassword() {
-    //Call the update on User
     this.resetPass = false;
     this.showEvents = false;
-    alert("Your password was reset!");
+    for (var user in this.users) {
+      if (this.users[user].Name == this.resetName) {
+        //this.users[user].Password = this.DataEncryption(String(this.newpasswordconfirm), Math.floor(Math.random() * this.Alphabet.length));
+        this.users[user].Password = this.DataEncryption(String(this.newpasswordconfirm), Math.floor(Math.random() * 7));
+        this.userService.resetPassword(this.users[user].id, this.users[user]).subscribe({
+          next: result => {
+            console.log("Changed password on a user.");
+            alert("Your password was reset!");
+          }
+        });
+        break;
+      }
+      else {
+        console.log("User didn't match.");
+      }
+    }
   }
 
   showPassReset(): void {
@@ -115,7 +133,9 @@ export class AppComponent implements OnInit {
 
   revealEvents(): void {
     //Check if user is not null here!
-    this.showEvents = true;
+    if (this.displayUser.id != '') {
+      this.showEvents = true;
+    }
   }
 
   logout(): void {
@@ -163,6 +183,14 @@ export class AppComponent implements OnInit {
 
   handleEventDescription(value: any): void {
     this.eventDescription = value.value;
+  }
+
+  handleUserResetText(value: any): void {
+    this.resetName = value.value;
+  }
+
+  handleAddEventDescription(value: any): void {
+    this.addEventDescription = value.value;
   }
 
   editedEvent: Event = {
@@ -281,14 +309,13 @@ export class AppComponent implements OnInit {
   //Shall this be any?
   updateEventDescription(event: Event): void {
     event.Description = this.eventDescription;
-    //this.eventService.updateEvent(event.id, event, this.displayUser.JWT);
-    console.log("Want to send update");
-    this.eventService.testPut(event).subscribe({
+    this.eventService.updateEvent(event.id, event, this.displayUser.JWT).subscribe({
       next: result => {
         console.log(result);
       }
     }
     );
+    alert("You changed an event it will appear differently on your next login.");
   }
 
   createEvent(): void {
@@ -298,7 +325,7 @@ export class AppComponent implements OnInit {
     this.editedEvent.Datacoder = Math.floor(Math.random() * 10);
     this.editedEvent.Description = this.DataEncryption(this.description, Math.floor(Math.random() * this.Alphabet.length));
     this.editedEvent.Description = this.DataEncryption(this.description, Math.floor(Math.random() * 10));
-    this.editedEvent.Description = this.description;
+    this.editedEvent.Description = this.addEventDescription;
 
     this.editedEvent.Title = this.DataEncryption(this.eventname, Math.floor(Math.random() * this.Alphabet.length));
     this.editedEvent.Title = this.DataEncryption(this.eventname, Math.floor(Math.random() * 10));
@@ -308,11 +335,21 @@ export class AppComponent implements OnInit {
     this.editedEvent.Occurrence = this.DataEncryption(this.eventoccurrence, Math.floor(Math.random() * 10));
     this.editedEvent.Occurrence = this.eventoccurrence;
 
-    this.eventService.registerEvent(this.displayUser.id, this.editedEvent, this.displayUser.JWT);
+    this.eventService.registerEvent(this.displayUser.id, this.editedEvent, this.displayUser.JWT).subscribe({
+      next: result => {
+        console.log(`Registered: ${result}`);
+      }
+    });
+    alert("You added an event it will appear on your next login.");
   }
 
   deleteEvent(event: Event): void {
-    this.eventService.deleteEvent(event.id, this.displayUser.JWT);
+    this.eventService.deleteEvent(event.id, this.displayUser.JWT).subscribe({
+      next: result => {
+        console.log("Deleted an event.");
+      }
+    });
+    alert("You deleted an event, you will not see it on your next login.");
   }
 
 
