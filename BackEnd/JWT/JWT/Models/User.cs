@@ -26,5 +26,7 @@ namespace BackEnd.Models
         [JsonPropertyName("JWT")]
         public string JWT { get; set; } = string.Empty;
 
+        [JsonPropertyName("Datacoder")]
+        public int Datacoder { get; set; } = 0;
     }
 }

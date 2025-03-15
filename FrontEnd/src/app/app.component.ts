@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
       Name: "",
       Password: "",
       JWT: "",
-      Datacoder:1
+      Datacoder:0
     };
     this.userService.getUsers().subscribe({
       next: Users => {
@@ -37,12 +37,14 @@ export class AppComponent implements OnInit {
         console.log(this.users);
       }
     });
+
     //Start decrypting here in the future
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
     //console.log(this.DataEncryption("password", Math.floor(Math.random() * this.Alphabet.length)));
     
   }
 
+  randomPlaceHolder: number = 0;
   
   resetPass: boolean = false;
   showEvents: boolean = false;
@@ -62,16 +64,19 @@ export class AppComponent implements OnInit {
 
   //2FA valid
   factorValid: boolean = false;
+  factorSummary: boolean = false;
 
   //2FA
   authText: string = "";
+
+  eventDescription: string = "";
 
   displayUser: User = {
     id: "",
     Name: "",
     Password: "",
     JWT: "",
-    Datacoder:1
+    Datacoder:0
   }
 
   users: Array<User> = [];
@@ -101,7 +106,7 @@ export class AppComponent implements OnInit {
         Name: "",
       Password: "",
       JWT: "",
-      Datacoder:1     
+      Datacoder:0     
     }
     this.showEvents = false;
   }
@@ -138,6 +143,18 @@ export class AppComponent implements OnInit {
     this.authText = value.value;
   }
 
+  handleEventDescription(value: any): void {
+    this.eventDescription = value.value;
+  }
+
+  editedEvent: Event = {
+      id: '',
+      Title: '',
+      Occurrence: '',
+      UserId: '',
+      Datacoder: 0
+  }
+
   login(): void
   {
     for (var index in this.users) {
@@ -145,19 +162,19 @@ export class AppComponent implements OnInit {
         this.users[index].Name == this.username) {
         //Login for now
         this.displayUser = this.users[index];
-        this.displayUser.JWT = "";
         console.log(this.DataDecryption(this.users[index].Datacoder, this.users[index].Password));
       }
     }
     this.verificationNumber = Math.floor(Math.random() * 10);
-    this.sendEmail(this.verificationNumber.toString());
+    console.log(this.verificationNumber);
+    //this.sendEmail(this.verificationNumber.toString());
+    this.factorValid = true;
   }
 
   //Submit button for 2FA:
   confirmLogin(): void {
     if (Number(this.authText) == this.verificationNumber) {
       this.revealEvents();
-      this.displayUser.JWT = this.users.find(_ => _.id == this.displayUser.id)?.JWT || "1";
       console.log(this.displayUser.JWT);
 
       this.eventService.getByUser(this.displayUser.id, this.displayUser.JWT).subscribe({
@@ -167,6 +184,9 @@ export class AppComponent implements OnInit {
         }
       });
     }
+
+    this.factorValid = false;
+
     //End of login functionality
 
   }
@@ -231,11 +251,13 @@ export class AppComponent implements OnInit {
     return result.toString();
   }
 
+
   //https://www.npmjs.com/package/@emailjs/browser
   //https://www.emailjs.com/docs/sdk/installation/
   async sendEmail(code: string): Promise<any> {
     emailjs.init("Jx0WTFsHz1RYtXBxb");
-    let response = await emailjs.send("service_hmsq2km", "template_6bborgf", {
+    //httperror 412 -> create new service at https://www.emailjs.com/
+    let response = await emailjs.send("service_alx9hxe", "template_6bborgf", {
       name: "User",
       title: code,
       email: "nbence0620@gmail.com",
@@ -243,5 +265,35 @@ export class AppComponent implements OnInit {
 
     console.log(response);
   }
+
+  updateEventDescription(event: Event): void {
+    event.Description = this.eventDescription;
+    this.eventService.updateEvent(event.id, event, this.displayUser.JWT);
+  }
+
+  createEvent(): void {
+    //MongoDB will override this
+    this.editedEvent.id = '';
+
+    this.editedEvent.Datacoder = Math.floor(Math.random() * 10);
+    this.editedEvent.Description = this.DataEncryption(this.description, Math.floor(Math.random() * this.Alphabet.length));
+    this.editedEvent.Description = this.DataEncryption(this.description, Math.floor(Math.random() * 10));
+    this.editedEvent.Description = this.description;
+
+    this.editedEvent.Title = this.DataEncryption(this.eventname, Math.floor(Math.random() * this.Alphabet.length));
+    this.editedEvent.Title = this.DataEncryption(this.eventname, Math.floor(Math.random() * 10));
+    this.editedEvent.Title = this.eventname;
+
+    this.editedEvent.Occurrence = this.DataEncryption(this.eventoccurrence, Math.floor(Math.random() * this.Alphabet.length));
+    this.editedEvent.Occurrence = this.DataEncryption(this.eventoccurrence, Math.floor(Math.random() * 10));
+    this.editedEvent.Occurrence = this.eventoccurrence;
+
+    this.eventService.registerEvent(this.displayUser.id, this.editedEvent, this.displayUser.JWT);
+  }
+
+  deleteEvent(event: Event): void {
+    this.eventService.deleteEvent(event.id, this.displayUser.JWT);
+  }
+
 
 }

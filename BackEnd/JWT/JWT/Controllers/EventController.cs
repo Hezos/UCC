@@ -10,7 +10,7 @@ namespace JWT.Controllers
 {
 
     [EnableCors("_myAllowSpecificOrigins")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class EventController : Controller

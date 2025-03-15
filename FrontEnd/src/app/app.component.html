@@ -2,89 +2,144 @@
 <router-outlet />
 -->
 <div style="width:100%">
-  <div *ngIf="displayUser.id == '' ">
-    <h1>Login for your events</h1>
-    <div>
+  <!--
+  <a href="tel:+36-20-808-8447" class="button button-positive">Call me</a>
+  -->
+  <p></p>
+  <div>
+    <div class="border border-4 border-dark w-50
+       rounded container justify-content-center align-items-center
+       bg-info bg-opacity-10 border border-info rounded-end"
+         *ngIf="displayUser.id == '' ">
+      <h1 class="h1 pb-2 mb-4 border-bottom border-dark
+        font-weight-bold">
+        Login to see your events
+      </h1>
       <div>
-        <h2>
-          Username:
-        </h2>
-        <input type="text"  (input)="handleUserNameText($event.target)"/>
+        <div class="mb-4">
+          <h2>
+            Username:
+          </h2>
+          <input class="form-control w-50 border-dark border-2" type="text" (input)="handleUserNameText($event.target)" />
+        </div>
+        <div>
+          <h2>
+            Password:
+          </h2>
+          <input type="password" class="form-control w-50 border-dark border-2"
+                 (input)="handlePasswordText($event.target)" />
+        </div>
+        <div>
+          <p></p>
+          <button class="btn btn-primary" (click)="login()">
+            Login
+          </button>
+        </div>
       </div>
-      <div>
-        <h2>
-          Password:
-        </h2>
-        <input type="password" (input)="handlePasswordText($event.target)"  />
-      </div>
-      <div>
-        <button (click)="login()">
-          Login
-        </button>
-      </div>
-    </div>
-    <button (click)="showPassReset()">
-      Reset password
-    </button>
-    <div *ngIf="resetPass">
-      <div *ngIf="displayUser.id == ''">
-        <p>
-          Username:
-        </p>
-        <input type="text" />
-      </div>
-      <p> New passord: </p>
-      <input type="password" />
-      <p> New password again: </p>
-      <input type="password" />
       <p></p>
-      <button (click)="resetPassword()">
-        Confirm reset
+      <button class="btn btn-primary" (click)="showPassReset()">
+        Reset password
       </button>
-    </div>
-    </div>
-    <div *ngIf="showEvents">
-      <h2> {{displayUser.Name}}'s events: </h2>
-      <button (click)="logout()">
-        Logout
-      </button>
-      <!-- Event div change to ngFor in the future -->
-      <div *ngFor="let event of eventList">
-        <h3>
-          Title:
-        </h3>
-        <p>
-          {{event.Title}}
-        </p>
-        <h3>
-          Date:
-        </h3>
-        <p>
-          {{event.Occurrence}}
-        </p>
-        <h3>
-          Description:
-        </h3>
-        <input type="text" placeholder="Description goes here" />
-        <button>
-          Update event's description
-        </button>
-      </div>
-
-      <div>
-        <p>You can add an event here:</p>
-        <input type="text" placeholder="event's name" />
-        <input type="date" />
-        <input type="text" placeholder="event's description" />
-        <button>
-          Add event
-        </button>
-        <p></p>
-        <input type="text" placeholder="Name of the event" />
-        <button>
-          Delete event
-        </button>
-      </div>
+      <p></p>
     </div>
 
+    <p></p>
+    <div *ngIf="resetPass" class="border border-4 border-dark w-50
+       rounded container justify-content-center align-items-center
+       bg-info bg-opacity-10 border border-info rounded-end"> 
+    <div *ngIf="displayUser.id == ''">
+      <h3>
+        Username:
+      </h3>
+      <input type="text" class="form-control w-50 border-dark border-2" />
+    </div>
+
+    <h3> New passord: </h3>
+    <input type="password" class="form-control w-50 border-dark border-2" />
+    <h3> Again: </h3>
+    <input type="password" class="form-control w-50 border-dark border-2"/>
+    <p></p>
+    <button class="btn btn-primary" (click)="resetPassword()">
+      Confirm reset
+    </button>
+      <p></p>
   </div>
+  </div>
+  <p></p>
+
+  <div *ngIf="factorValid" class="w-50 border border-4 border-dark 
+       rounded container justify-content-center align-items-center
+       bg-info bg-opacity-10 border border-info rounded-end ">
+    <div style="w-10">
+      <h3 style="w-10">
+        Emailed number:
+      </h3>
+      <input type="number" class="form-control w-100 border-dark border-2"
+             (input)="handleAuthText($event.target)" />
+      <p></p>
+      <button class="btn btn-primary" (click)="confirmLogin()">
+        Submit
+      </button>
+      <p></p>
+    </div>
+  </div>
+
+  <div *ngIf="showEvents" class="border border-4 border-dark w-100
+       rounded container justify-content-center align-items-center
+       border border-info
+       p-3 mb-2 bg-warning text-white
+       rounded-end" >
+      <h2 class="p-3 mb-2 bg-light text-dark">
+      {{displayUser.Name}}'s events:
+      </h2>
+    <button class="btn btn-primary" (click)="logout()">
+      Logout
+    </button>
+    <!-- Event div change to ngFor in the future -->
+    <div *ngFor="let event of eventList">
+      <h2 class="border-4 border-bottom">
+        Title:
+      </h2>
+      <h3>
+        {{event.Title}}
+      </h3>
+      <h2>
+        Date:
+      </h2>
+      <h3>
+        {{event.Occurrence}}
+      </h3>
+      <h2>
+        Description:
+      </h2>
+      <input type="text" placeholder="{{event.Description}}" class="form-control w-50
+             border-dark border-2" (input)="handleEventDescription($event.target)" />
+      <p></p>
+      <button class="btn btn-primary" (click)="updateEventDescription(event)">
+        Update event's description
+      </button>
+      <p></p>
+      <button class="btn btn-primary" (click)="deleteEvent(event)">
+        Delete event
+      </button>
+      <p></p>
+    </div>
+
+    <div>
+      <h2>You can add an event here:</h2>
+      <input type="text" class="form-control w-50 border-dark border-2" (input)="handleTitleText($event.target)"
+             placeholder="event's name"  />
+      <p></p>
+      <input type="date" class="form-control w-50 border-dark border-2" (input)="handleDateText($event.target)" />
+      <p></p>
+      <input type="text" class="form-control w-50 border-dark border-2" (input)="handleEventDescription($event.target)"
+             placeholder="event' s description" />
+      <p></p>
+      <button class="btn btn-primary" (click)="createEvent()">
+        Add event
+      </button>
+      <p></p> 
+    </div>
+  </div>
+
+</div>

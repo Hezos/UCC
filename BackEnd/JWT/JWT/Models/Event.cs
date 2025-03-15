@@ -23,5 +23,7 @@ namespace BackEnd.Models
         [JsonPropertyName("Description")]
         public string? Description { get; set; } = "";
 
+        [JsonPropertyName("Datacoder")]
+        public int Datacoder { get; set; } = 0;
     }
 }

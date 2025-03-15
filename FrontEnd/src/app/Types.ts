@@ -1,5 +1,6 @@
 export interface Event
 {
+  //Let MongoDB handle id!
   id: string;
   Title: string;
   Occurrence: string;
