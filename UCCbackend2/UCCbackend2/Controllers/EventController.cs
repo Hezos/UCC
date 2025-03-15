@@ -58,7 +58,7 @@ namespace UCCbackend2.Controllers
             return Ok();
         }
 
-        [HttpPut("post")]
+        [HttpPost("post")]
         public IActionResult PostParam([FromBody]Event data)
         {
             

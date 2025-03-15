@@ -48,9 +48,8 @@ export class EventService {
     });
   }
 
-  testPut(event: Event) {
-    var result = this.http.put<Event>("https://localhost:7239/api/event/post", event);
-    console.log(result);
+  testPut(event: any) {
+    var result = this.http.post("https://localhost:7239/api/event/post", event);
     return result;
   }
 

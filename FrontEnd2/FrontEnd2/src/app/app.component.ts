@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
       Datacoder: 0
     };
 
+    /*
     this.eventService.testPut({
       "id": "67d2d247e03f97ab3265d816",
       "UserId": "67d18275cc31d174b300cc9c",
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit {
         }
       }
     );
+    */
 
     this.userService.getUsers().subscribe({
       next: Users => {
@@ -280,7 +282,13 @@ export class AppComponent implements OnInit {
   updateEventDescription(event: Event): void {
     event.Description = this.eventDescription;
     //this.eventService.updateEvent(event.id, event, this.displayUser.JWT);
-    this.eventService.testPut(event);
+    console.log("Want to send update");
+    this.eventService.testPut(event).subscribe({
+      next: result => {
+        console.log(result);
+      }
+    }
+    );
   }
 
   createEvent(): void {
