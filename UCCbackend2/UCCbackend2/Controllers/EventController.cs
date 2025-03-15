@@ -1,16 +1,16 @@
-﻿using BackEnd.Models;
-using JWT.Services;
+﻿using UCCbackend2.Models;
+using UCCbackend2.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 //https://learn.microsoft.com/en-us/aspnet/core/security/authentication/jwt-authn?view=aspnetcore-9.0&tabs=windows
 
-namespace JWT.Controllers
+namespace UCCbackend2.Controllers
 {
 
     [EnableCors("_myAllowSpecificOrigins")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class EventController : Controller

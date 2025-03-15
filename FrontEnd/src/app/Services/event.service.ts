@@ -16,7 +16,7 @@ export class EventService {
   http = inject(HttpClient);
 
   getByUser(id: string, jwt: string) {
-    return this.http.get<Array<Event>>(`https://localhost:7274/api/event/${id}`, {
+    return this.http.get<Array<Event>>(`https://localhost:7239/api/event/${id}`, {
       headers: {
         "Authorization": `Bearer ${jwt}` 
       }
@@ -24,7 +24,7 @@ export class EventService {
   }
 
   updateEvent(id: string, event: Event, jwt: string) {
-    return this.http.put<Event>(`https://localhost:7274/api/event/${id}`, event, {
+    return this.http.put<Event>(`https://localhost:7239/api/event/${id}`, event, {
       headers: {
         "Authorization": `Bearer ${jwt}`
       }
@@ -33,7 +33,7 @@ export class EventService {
 
   registerEvent(userid: string, event: Event, jwt: string) {
     event.UserId = userid;
-    return this.http.post<Event>("https://localhost:7274/api/event", event, {
+    return this.http.post<Event>("https://localhost:7239/api/event", event, {
       headers: {
         "Authorization": `Bearer ${jwt}` 
       }
@@ -41,7 +41,7 @@ export class EventService {
   }
 
   deleteEvent(id: string, jwt: string) {
-    return this.http.delete(`https://localhost:7274/api/event/${id}`, {
+    return this.http.delete(`https://localhost:7239/api/event/${id}`, {
       headers: {
         "Authorization": `Bearer ${jwt}` 
       }

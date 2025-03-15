@@ -13,15 +13,15 @@ export class UserService {
   http = inject(HttpClient);
   
   getUser() {
-    return this.http.get<User>('https://localhost:7274/api/user');
+    return this.http.get<User>('https://localhost:7239/api/user');
   }
 
   resetPassword(userid: string, user: User) {
-    return this.http.put<User>(`https://localhost:7274/api/user/${userid}`, user);
+    return this.http.put<User>(`https://localhost:7239/api/user/${userid}`, user);
   }
 
   getUsers() {
-    return this.http.get<Array<User>>('https://localhost:7274/api/user/all');
+    return this.http.get<Array<User>>('https://localhost:7239/api/user/all');
   }
 
 
