@@ -29,12 +29,12 @@ namespace UCCbackend2.Controllers
             return Ok(result);
         }
 
-        // PUT: api/User/id
+        // PUT: api/User/id Put doesn't seem to work
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody] Event e)
         {
             Event oldEvent = await _eventService.GetAsync(id);
-            e.Id = oldEvent.Id;
+            e.id = oldEvent.id;
 
             if (oldEvent is null)
             {
@@ -56,6 +56,13 @@ namespace UCCbackend2.Controllers
         {
             await _eventService.DeleteAsync(id);
             return Ok();
+        }
+
+        [HttpPut("post")]
+        public IActionResult PostParam([FromBody]Event data)
+        {
+            
+            return Ok(data);
         }
     }
 }

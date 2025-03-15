@@ -9,7 +9,7 @@ namespace UCCbackend2.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+        public string? id { get; set; }
 
         [JsonPropertyName("UserId")]
         public string UserId { get; set; } = "";

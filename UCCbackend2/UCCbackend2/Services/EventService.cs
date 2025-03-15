@@ -22,7 +22,7 @@ namespace UCCbackend2.Services
 
         public async Task DeleteAsync(string id)
         {
-            var filter = Builders<Event>.Filter.Eq(_ => _.Id, id);
+            var filter = Builders<Event>.Filter.Eq(_ => _.id, id);
             var result = await _events.DeleteOneAsync(filter);
         }
 
@@ -33,7 +33,7 @@ namespace UCCbackend2.Services
 
         public async Task<Event> GetAsync(string id)
         {
-            return await _events.Find<Event>(_ => _.Id == id).FirstOrDefaultAsync();
+            return await _events.Find<Event>(_ => _.id == id).FirstOrDefaultAsync();
         }
 
         public async Task<List<Event>> GetByUserAsync(string userid)
@@ -44,7 +44,7 @@ namespace UCCbackend2.Services
 
         public async Task UpdateAsync(string id, Event e)
         {
-            var filter = Builders<Event>.Filter.Eq(_ => _.Id, id);
+            var filter = Builders<Event>.Filter.Eq(_ => _.id, id);
             var result = await _events.ReplaceOneAsync(filter, e);
             if (result.MatchedCount == 0)
             {

@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Event, User } from './Types';
-import { UserService } from './Services/user.service';
-import { EventService } from './Services/event.service';
+import { UserService } from './services/user.service';
+import { EventService } from './services/event.service';
 import { CheckboxRequiredValidator } from '@angular/forms';
 import emailjs, { send } from '@emailjs/browser';
 
@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   title = 'UCC apply webapage';
 
   Alphabet: Array<string> = [
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l','m', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
   ];
 
   verificationNumber: number = 0;
@@ -28,8 +28,24 @@ export class AppComponent implements OnInit {
       Name: "",
       Password: "",
       JWT: "",
-      Datacoder:0
+      Datacoder: 0
     };
+
+    this.eventService.testPut({
+      "id": "67d2d247e03f97ab3265d816",
+      "UserId": "67d18275cc31d174b300cc9c",
+      "Title": "myTest",
+      "Occurrence": "2025/03/14",
+      "Description": "Tested event",
+      "Datacoder": 3
+    }).subscribe(
+      {
+        next: result => {
+          console.log(result);
+        }
+      }
+    );
+
     this.userService.getUsers().subscribe({
       next: Users => {
         this.users = Users;
@@ -41,11 +57,11 @@ export class AppComponent implements OnInit {
     //Start decrypting here in the future
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
     //console.log(this.DataEncryption("password", Math.floor(Math.random() * this.Alphabet.length)));
-    
+
   }
 
   randomPlaceHolder: number = 0;
-  
+
   resetPass: boolean = false;
   showEvents: boolean = false;
 
@@ -76,7 +92,7 @@ export class AppComponent implements OnInit {
     Name: "",
     Password: "",
     JWT: "",
-    Datacoder:0
+    Datacoder: 0
   }
 
   users: Array<User> = [];
@@ -103,10 +119,10 @@ export class AppComponent implements OnInit {
   logout(): void {
     this.displayUser = {
       id: "",
-        Name: "",
+      Name: "",
       Password: "",
       JWT: "",
-      Datacoder:0     
+      Datacoder: 0
     }
     this.showEvents = false;
   }
@@ -148,15 +164,14 @@ export class AppComponent implements OnInit {
   }
 
   editedEvent: Event = {
-      id: '',
-      Title: '',
-      Occurrence: '',
-      UserId: '',
-      Datacoder: 0
+    id: '',
+    Title: '',
+    Occurrence: '',
+    UserId: '',
+    Datacoder: 0
   }
 
-  login(): void
-  {
+  login(): void {
     for (var index in this.users) {
       if (this.DataDecryption(this.users[index].Datacoder, this.users[index].Password) == this.password &&
         this.users[index].Name == this.username) {
@@ -176,13 +191,14 @@ export class AppComponent implements OnInit {
     if (Number(this.authText) == this.verificationNumber) {
       this.revealEvents();
       console.log(this.displayUser.JWT);
-
+      
       this.eventService.getByUser(this.displayUser.id, this.displayUser.JWT).subscribe({
         next: Events => {
           this.eventList = Events;
           console.log(this.eventList);
         }
       });
+      
     }
 
     this.factorValid = false;
@@ -192,41 +208,33 @@ export class AppComponent implements OnInit {
   }
 
 
-  DataEncryption(original: String, shift: number): string
-  {
+  DataEncryption(original: String, shift: number): string {
     var result: String = '';
     //Need 2 points where is in the alphabet, and where the solution will be.
     var oPositions: Array<number> = [];
-    for (let index in original)
-    {
-      for (let char in this.Alphabet)
-      {
-        if (original[index] == this.Alphabet[char])
-        {
+    for (let index in original) {
+      for (let char in this.Alphabet) {
+        if (original[index] == this.Alphabet[char]) {
           oPositions.push(Number(char));
         }
-      }      
+      }
     }
 
     //If the index points way beyond the length of the array start over the counting
-    for (let index in oPositions)
-    {
-        if (oPositions[index] + shift - 1 < this.Alphabet.length)
-        {
-          result += this.Alphabet[oPositions[index] + shift];
-        }
-        else
-        {
-          result += this.Alphabet[oPositions[index] + shift - this.Alphabet.length];
-        }
-      
+    for (let index in oPositions) {
+      if (oPositions[index] + shift - 1 < this.Alphabet.length) {
+        result += this.Alphabet[oPositions[index] + shift];
+      }
+      else {
+        result += this.Alphabet[oPositions[index] + shift - this.Alphabet.length];
+      }
+
     }
 
     return result.toString();
   }
 
-  DataDecryption(shift: number, Encoded:String): string
-  {
+  DataDecryption(shift: number, Encoded: String): string {
     var result: String = '';
     var oPositions: Array<number> = [];
     for (let index in Encoded) {
@@ -252,6 +260,7 @@ export class AppComponent implements OnInit {
   }
 
 
+  
   //https://www.npmjs.com/package/@emailjs/browser
   //https://www.emailjs.com/docs/sdk/installation/
   async sendEmail(code: string): Promise<any> {
@@ -265,6 +274,7 @@ export class AppComponent implements OnInit {
 
     console.log(response);
   }
+  
 
   //Shall this be any?
   updateEventDescription(event: Event): void {
